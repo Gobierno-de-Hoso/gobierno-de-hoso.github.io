@@ -1,6 +1,6 @@
 site:
-  name: AstroWind
-  site: 'https://astrowind.vercel.app'
+  name: Gobierno de Hoso
+  site: 'https://gobierno-de-hoso.github.io'
   base: '/'
   trailingSlash: false
 
@@ -9,14 +9,14 @@ site:
 # Default SEO metadata
 metadata:
   title:
-    default: AstroWind
+    default: Gobierno de Hoso
     template: '%s — AstroWind'
-  description: "\U0001F680 Suitable for Startups, Small Business, Sass Websites, Professional Portfolios, Marketing Websites, Landing Pages & Blogs."
+  description: "Pagina oficial del gobierno de la Republica de Hoso"
   robots:
     index: true
     follow: true
   openGraph:
-    site_name: AstroWind
+    site_name: Gobierno de Hoso
     images:
       - url: '~/assets/images/default.png'
         width: 1200
