@@ -1,0 +1,30 @@
+---
+import Carta from 'src/components/Carta.astro';
+import QRCode from 'qrcode';
+
+const { slug } = Astro.params;
+// get current year
+const year = new Date().getFullYear();
+
+export async function getStaticPaths() {
+  const letters = await Astro.glob('src/content/docs/**/*.md');
+  return letters.map(letter => ({
+    params: { slug: letter.frontmatter.slug }
+  }));
+}
+
+const letter = await import(`../../content/docs/${slug}.md`);
+const { Content } = letter;
+
+// Get site URL
+const siteUrl = new URL(Astro.site);
+// Generate QR code for a given URL (adjust the URL as needed)
+const qrCodeUrl = `${siteUrl.origin}/docs/${slug}`;
+const qrCodeDataUrl = await QRCode.toDataURL(qrCodeUrl);
+
+---
+<Carta title={letter.frontmatter.title} frontmatter={letter.frontmatter} year={year} qrCodeDataUrl={qrCodeDataUrl}>
+  <article>
+    <Content />
+  </article>
+</Carta>
