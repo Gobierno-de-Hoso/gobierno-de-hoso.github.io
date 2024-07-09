@@ -16,8 +16,10 @@ export async function getStaticPaths() {
 const letter = await import(`../../content/docs/${slug}.md`);
 const { Content } = letter;
 
+// Get site URL
+const siteUrl = new URL(Astro.site);
 // Generate QR code for a given URL (adjust the URL as needed)
-const qrCodeUrl = `https://example.com/letters/${slug}`;
+const qrCodeUrl = `${siteUrl.origin}/docs/${slug}`;
 const qrCodeDataUrl = await QRCode.toDataURL(qrCodeUrl);
 
 ---
