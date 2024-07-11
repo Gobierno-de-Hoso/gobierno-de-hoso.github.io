@@ -3,61 +3,32 @@ import { getPermalink, getBlogPermalink, getAsset } from './utils/permalinks';
 export const headerData = {
   links: [
     {
-      text: 'Homes',
+      text: 'Ministerios',
       links: [
         {
-          text: 'SaaS',
-          href: getPermalink('/homes/saas'),
+          text: 'Exterior',
+          href: getPermalink('/ministerio/exterior'),
         },
         {
-          text: 'Startup',
-          href: getPermalink('/homes/startup'),
+          text: 'Interior',
+          href: getPermalink('/ministerio/interior'),
         },
         {
-          text: 'Mobile App',
-          href: getPermalink('/homes/mobile-app'),
+          text: 'Defensa',
+          href: getPermalink('/ministerio/defensa'),
         },
         {
-          text: 'Personal',
-          href: getPermalink('/homes/personal'),
+          text: 'Tecnología e Innovación',
+          href: getPermalink('/ministerio/tecnologia'),
+        },
+        {
+          text: `Turismo`,
+          href: getPermalink('ministerio/turismo')
         },
       ],
     },
     {
-      text: 'Pages',
-      links: [
-        {
-          text: 'Features (Anchor Link)',
-          href: getPermalink('/#features'),
-        },
-        {
-          text: 'Services',
-          href: getPermalink('/services'),
-        },
-        {
-          text: 'Pricing',
-          href: getPermalink('/pricing'),
-        },
-        {
-          text: 'About us',
-          href: getPermalink('/about'),
-        },
-        {
-          text: 'Contact',
-          href: getPermalink('/contact'),
-        },
-        {
-          text: 'Terms',
-          href: getPermalink('/terms'),
-        },
-        {
-          text: 'Privacy policy',
-          href: getPermalink('/privacy'),
-        },
-      ],
-    },
-    {
-      text: 'Landing',
+      text: 'Servicios',
       links: [
         {
           text: 'Lead Generation',
@@ -111,11 +82,11 @@ export const headerData = {
       ],
     },
     {
-      text: 'Widgets',
+      text: 'Embajadas',
       href: '#',
     },
   ],
-  actions: [{ text: 'Download', href: 'https://github.com/onwidget/astrowind', target: '_blank' }],
+  // actions: [{ text: 'Download', href: 'https://github.com/onwidget/astrowind', target: '_blank' }],
 };
 
 export const footerData = {

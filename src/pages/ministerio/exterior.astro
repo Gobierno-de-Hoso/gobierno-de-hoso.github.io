@@ -1,0 +1,181 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+
+import Hero from '~/components/widgets/Hero.astro';
+// import Note from '~/components/widgets/Note.astro';
+import Features from '~/components/widgets/Features.astro';
+import Features2 from '~/components/widgets/Features2.astro';
+// import Steps from '~/components/widgets/Steps.astro';
+import Content from '~/components/widgets/Content.astro';
+import BlogLatestPosts from '~/components/widgets/BlogLatestPosts.astro';
+import FAQs from '~/components/widgets/FAQs.astro';
+import Stats from '~/components/widgets/Stats.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+
+const metadata = {
+  title: 'Ministerio de Relaciones Exteriores - República de Hoso',
+  ignoreTitleTemplate: true,
+};
+---
+
+<Layout metadata={metadata}>
+  <!-- Hero Widget ******************* -->
+
+  <Hero
+    actions={[
+      { text: 'Conoce más', href: '#features' },
+    ]}
+  >
+    <Fragment slot="title">
+      Ministerio de <span class="text-accent dark:text-white highlight">Relaciones Exteriores</span>
+    </Fragment>
+
+    <Fragment slot="subtitle">
+      Bienvenido al sitio oficial del Ministerio de Relaciones Exteriores de la República de Hoso. <br>
+      Promoviendo la cooperación internacional y fortaleciendo nuestras relaciones diplomáticas.
+    </Fragment>
+  </Hero>
+
+  <!-- Note Widget ******************* -->
+
+  <!-- <Note /> -->
+
+  <!-- Features Widget *************** -->
+
+  <Features
+    id="features"
+    tagline="Características"
+    title="Nuestras Iniciativas"
+    subtitle="Descubre las principales iniciativas y proyectos que impulsan las relaciones internacionales de nuestra república."
+    items={[
+      {
+        title: 'Diplomacia Activa',
+        description: 'Establecemos y fortalecemos relaciones diplomáticas con naciones y organizaciones internacionales.',
+        icon: 'tabler:users',
+      },
+      {
+        title: 'Cooperación Internacional',
+        description: 'Promovemos la cooperación en áreas clave como tecnología, medio ambiente y educación.',
+        icon: 'tabler:globe',
+      },
+      {
+        title: 'Representación Global',
+        description: 'Representamos a Hoso en foros y eventos internacionales, asegurando nuestra voz en la comunidad global.',
+        icon: 'tabler:world',
+      },
+    ]}
+  />
+
+  <!-- Content Widget **************** -->
+
+  <Content
+    isReversed
+    tagline="Nuestra Misión y Visión"
+    title="Compromiso Internacional"
+    items={[
+      {
+        title: 'Misión',
+        description: 'Fortalecer las relaciones diplomáticas y promover la presencia de Hoso en el ámbito internacional mediante la cooperación y el diálogo.',
+      },
+      {
+        title: 'Visión',
+        description: 'Convertir a Hoso en un referente de diplomacia y cooperación internacional, consolidando alianzas estratégicas y promoviendo la paz y el desarrollo global.',
+      },
+    ]}
+    image={{
+      src: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+      alt: 'Imagen representativa',
+    }}
+  >
+    <Fragment slot="content">
+      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">Nuestro compromiso</h3>
+      Trabajamos para fortalecer la presencia de Hoso en la comunidad internacional y fomentar la cooperación global.
+    </Fragment>
+
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+  </Content>
+
+  <!-- Features2 Widget ************** -->
+
+  <Features2
+    title="Proyectos Internacionales"
+    subtitle="Conoce los proyectos más importantes en los que estamos trabajando a nivel internacional."
+    tagline="Proyectos"
+    items={[
+      {
+        title: 'Acuerdos Bilaterales',
+        description: 'Firmamos y gestionamos acuerdos bilaterales que benefician a nuestra nación y a nuestros socios internacionales.',
+        icon: 'tabler:file',
+      },
+      {
+        title: 'Cooperación Multilateral',
+        description: 'Participamos activamente en organizaciones y foros multilaterales para promover nuestros intereses y valores.',
+        icon: 'tabler:users',
+      },
+    ]}
+  >
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+  </Features2>
+
+  <!-- HighlightedPosts Widget ******* -->
+
+  <BlogLatestPosts
+    title="Últimas Noticias"
+    information="Mantente informado sobre las últimas actividades y proyectos del Ministerio de Relaciones Exteriores de Hoso."
+  />
+
+  <!-- FAQs Widget ******************* -->
+
+  <FAQs
+    title="Preguntas Frecuentes"
+    subtitle="Respuestas a las preguntas más comunes sobre el Ministerio de Relaciones Exteriores."
+    tagline="FAQs"
+    classes={{ container: 'max-w-6xl' }}
+    items={[
+      {
+        title: '¿Cuál es la función principal del Ministerio de Relaciones Exteriores?',
+        description: 'Fortalecer las relaciones diplomáticas y promover la cooperación internacional.',
+      },
+      {
+        title: '¿Cómo puedo participar en proyectos internacionales?',
+        description: 'Puedes involucrarte a través de nuestras plataformas de colaboración y redes sociales.',
+      },
+    ]}
+  />
+
+  <!-- Stats Widget ****************** -->
+
+  <Stats
+    stats={[
+      { title: 'Acuerdos Firmados', amount: '75' },
+      { title: 'Embajadas y Consulados', amount: '15' },
+      { title: 'Proyectos Internacionales', amount: '30' },
+    ]}
+  />
+
+  <!-- CallToAction Widget *********** -->
+
+  <CallToAction
+    actions={[
+      {
+        variant: 'primary',
+        text: 'Únete a Nosotros',
+        href: '#',
+        target: '_blank',
+        icon: 'tabler:user-plus',
+      },
+    ]}
+  >
+    <Fragment slot="title">
+      Sé parte de la <br class="block sm:hidden" /><span class="sm:whitespace-nowrap">Diplomacia Global</span>
+    </Fragment>
+
+    <Fragment slot="subtitle">
+      Únete a nuestros esfuerzos por fortalecer las relaciones internacionales y promover la cooperación global.
+    </Fragment>
+  </CallToAction>
+</Layout>
