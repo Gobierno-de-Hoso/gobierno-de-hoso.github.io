@@ -1,0 +1,47 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+
+const metadata = {
+  title: 'Validación de Documentos - República de Hoso',
+  ignoreTitleTemplate: true,
+};
+---
+
+<Layout metadata={metadata}>
+  <h1>Validación de Documentos</h1>
+  <p>Ingresa el serial de validación para verificar su autenticidad.</p>
+  
+  <form id="validation-form">
+    <label for="serial">Serial de Validación:</label>
+    <input type="text" id="serial" name="serial" required />
+    <button type="submit">Validar</button>
+  </form>
+  
+  <div id="validation-result"></div>
+
+  <script>
+    document.getElementById('validation-form').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      
+      const serial = document.getElementById('serial').value;
+      let validationResult = null;
+
+      try {
+        const response = await fetch(`/docs/${serial}`, {
+          method: 'HEAD'
+        });
+
+        if (response.status === 200) {
+          window.location.href = `/docs/${serial}`;
+        } else {
+          validationResult = 'Documento no encontrado. Por favor, verifica el serial e inténtalo de nuevo.';
+        }
+      } catch (error) {
+        console.error('Error validating serial:', error);
+        validationResult = 'Error validando el serial. Por favor, inténtalo de nuevo más tarde.';
+      }
+
+      document.getElementById('validation-result').textContent = validationResult;
+    });
+  </script>
+</Layout>

@@ -1,0 +1,181 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+
+import Hero from '~/components/widgets/Hero.astro';
+// import Note from '~/components/widgets/Note.astro';
+import Features from '~/components/widgets/Features.astro';
+import Features2 from '~/components/widgets/Features2.astro';
+// import Steps from '~/components/widgets/Steps.astro';
+import Content from '~/components/widgets/Content.astro';
+import BlogLatestPosts from '~/components/widgets/BlogLatestPosts.astro';
+import FAQs from '~/components/widgets/FAQs.astro';
+import Stats from '~/components/widgets/Stats.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+
+const metadata = {
+  title: 'Portal de Transparencia - República de Hoso',
+  ignoreTitleTemplate: true,
+};
+---
+
+<Layout metadata={metadata}>
+  <!-- Hero Widget ******************* -->
+
+  <Hero
+    actions={[
+      { text: 'Conoce más', href: '#features' },
+    ]}
+  >
+    <Fragment slot="title">
+      Portal de <span class="text-accent dark:text-white highlight">Transparencia</span>
+    </Fragment>
+
+    <Fragment slot="subtitle">
+      Bienvenido al Portal de Transparencia del gobierno de la República de Hoso. <br>
+      Aquí encontrarás información detallada sobre nuestras actividades y documentos públicos.
+    </Fragment>
+  </Hero>
+
+  <!-- Note Widget ******************* -->
+
+  <!-- <Note /> -->
+
+  <!-- Features Widget *************** -->
+
+  <Features
+    id="features"
+    tagline="Transparencia"
+    title="Nuestro Compromiso con la Transparencia"
+    subtitle="En Hoso, valoramos la transparencia y el acceso a la información pública. Aquí puedes encontrar las principales áreas de nuestra administración abiertas al público."
+    items={[
+      {
+        title: 'Documentos Públicos',
+        description: 'Accede a una variedad de documentos públicos, incluyendo informes financieros, políticas gubernamentales y más.',
+        icon: 'tabler:file',
+      },
+      {
+        title: 'Proyectos y Resultados',
+        description: 'Explora los detalles de los proyectos en curso y los resultados obtenidos en diversas áreas de nuestra administración.',
+        icon: 'tabler:chart-line',
+      },
+      {
+        title: 'Participación Ciudadana',
+        description: 'Conoce las oportunidades para participar en la toma de decisiones y en las iniciativas comunitarias.',
+        icon: 'tabler:users',
+      },
+    ]}
+  />
+
+  <!-- Content Widget **************** -->
+
+  <Content
+    isReversed
+    tagline="Dentro de la República"
+    title="Documentos y Recursos"
+    items={[
+      {
+        title: 'Informes Financieros',
+        description: 'Revisa los informes financieros anuales y trimestrales para obtener una visión clara de nuestras finanzas.',
+      },
+      {
+        title: 'Políticas Gubernamentales',
+        description: 'Consulta las políticas y regulaciones implementadas por el gobierno para diversas áreas.',
+      },
+    ]}
+    image={{
+      src: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+      alt: 'Documentos Públicos',
+    }}
+  >
+    <Fragment slot="content">
+      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">Acceso a la Información</h3>
+      Trabajamos para asegurar que toda la información relevante esté disponible para nuestros ciudadanos.
+    </Fragment>
+
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+  </Content>
+
+  <!-- Features2 Widget ************** -->
+
+  <Features2
+    title="Proyectos y Resultados"
+    subtitle="Conoce los proyectos más importantes y sus resultados."
+    tagline="Proyectos"
+    items={[
+      {
+        title: 'Infraestructura',
+        description: 'Proyectos de construcción y mejora de infraestructura pública.',
+        icon: 'tabler:building',
+      },
+      {
+        title: 'Salud y Educación',
+        description: 'Iniciativas para mejorar los servicios de salud y educación en la República.',
+        icon: 'tabler:school',
+      },
+    ]}
+  >
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+  </Features2>
+
+  <!-- HighlightedPosts Widget ******* -->
+
+  <BlogLatestPosts
+    title="Últimas Noticias"
+    information="Mantente informado sobre las últimas actividades y anuncios del gobierno de Hoso. ¡Descubre más en nuestro blog!"
+  />
+
+  <!-- FAQs Widget ******************* -->
+
+  <FAQs
+    title="Preguntas Frecuentes"
+    subtitle="Respuestas a las preguntas más comunes sobre nuestras políticas de transparencia."
+    tagline="FAQs"
+    classes={{ container: 'max-w-6xl' }}
+    items={[
+      {
+        title: '¿Qué es el Portal de Transparencia?',
+        description: 'Es una plataforma donde puedes acceder a información pública y documentos relacionados con la administración del gobierno.',
+      },
+      {
+        title: '¿Cómo puedo participar en las decisiones del gobierno?',
+        description: 'Puedes involucrarte a través de nuestras plataformas de participación ciudadana y redes sociales.',
+      },
+    ]}
+  />
+
+  <!-- Stats Widget ****************** -->
+
+  <Stats
+    stats={[
+      { title: 'Documentos Publicados', amount: '250' },
+      { title: 'Proyectos Activos', amount: '75' },
+      { title: 'Participantes Ciudadanos', amount: '1.2K' },
+    ]}
+  />
+
+  <!-- CallToAction Widget *********** -->
+
+  <CallToAction
+    actions={[
+      {
+        variant: 'primary',
+        text: 'Participa Ahora',
+        href: '#',
+        target: '_blank',
+        icon: 'tabler:user-plus',
+      },
+    ]}
+  >
+    <Fragment slot="title">
+      Sé parte de la <br class="block sm:hidden" /><span class="sm:whitespace-nowrap">Transparencia</span>
+    </Fragment>
+
+    <Fragment slot="subtitle">
+      Únete a nuestros esfuerzos por un gobierno más abierto y participativo.
+    </Fragment>
+  </CallToAction>
+</Layout>
