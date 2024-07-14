@@ -1,39 +1,94 @@
 ---
 import Carta from 'src/components/Carta.astro';
 import QRCode from 'qrcode';
+import fs from 'fs';
+import path from 'path';
 
-// Get current year
+// Obtener el año actual
 const year = new Date().getFullYear();
 
 export async function getStaticPaths() {
   const letters = await Astro.glob('src/content/docs/**/*.md');
-  return letters.map(letter => ({
-    params: { filename: letter.file.split('/').pop().replace('.md', '') }
-  }));
+  const docsPath = path.resolve('./src/content/docs');
+  
+  // Verificar que la carpeta docs existe
+  let pdfFiles = [];
+  if (fs.existsSync(docsPath)) {
+    pdfFiles = fs.readdirSync(docsPath).filter(file => file.endsWith('.pdf'));
+  }
+
+  const paths = [
+    ...letters.map(letter => ({
+      params: { filename: letter.file.split('/').pop().replace('.md', '') }
+    })),
+    ...pdfFiles.map(file => ({
+      params: { filename: file.replace('.pdf', '') }
+    }))
+  ];
+
+  return paths;
 }
 
-// Get the filename parameter
+// Obtener el parámetro filename
 const { filename } = Astro.params;
 
-// Import the markdown file based on the filename
-const letter = await import(`../../content/docs/${filename}.md`);
-const { Content } = letter;
+let isCarta = false;
+let isPdf = false;
+let letter = null;
+let qrCodeDataUrl = '';
 
-// Get site URL
-const siteUrl = new URL(Astro.site);
+if (filename.startsWith('C')) {
+  // Importar el archivo markdown basado en el filename
+  letter = await import(`../../content/docs/${filename}.md`);
+  const { Content } = letter;
+  isCarta = true;
 
-// Generate QR code for a given URL (adjust the URL as needed)
-const qrCodeUrl = `${siteUrl.origin}/docs/${filename}`;
-const qrCodeDataUrl = await QRCode.toDataURL(qrCodeUrl, {
-  color: {
-    dark: '#000000',  // Black dots
-    light: '#0000'    // Transparent background
+  // Obtener la URL del sitio
+  const siteUrl = new URL(Astro.site);
+
+  // Generar código QR para una URL dada (ajustar la URL según sea necesario)
+  const qrCodeUrl = `${siteUrl.origin}/docs/${filename}`;
+  qrCodeDataUrl = await QRCode.toDataURL(qrCodeUrl, {
+    color: {
+      dark: '#000000',  // Puntos negros
+      light: '#0000'    // Fondo transparente
+    }
+  });
+} else if (filename.startsWith('T')) {
+  // Verificar que el archivo PDF existe
+  const pdfPath = path.resolve(`./src/content/docs/${filename}.pdf`);
+  if (fs.existsSync(pdfPath)) {
+    isPdf = true;
+  } else {
+    // Manejo del caso en que no se encuentra el archivo PDF
+    throw new Error(`El archivo PDF ${filename}.pdf no fue encontrado.`);
   }
-});
-
+}
 ---
-<Carta title={letter.frontmatter.title} frontmatter={letter.frontmatter} year={year} qrCodeDataUrl={qrCodeDataUrl}, id={filename}>
-  <article>
-    <Content />
-  </article>
-</Carta>
+
+{isCarta && (
+  <Carta title={letter.frontmatter.title} frontmatter={letter.frontmatter} year={year} qrCodeDataUrl={qrCodeDataUrl} id={filename}>
+    <article>
+      <letter.Content />
+    </article>
+  </Carta>
+)}
+
+{isPdf && (
+  <div class="flex justify-center">
+        <center>
+        <h1 class="font-bold leading-tighter tracking-tighter mb-4 dark:text-gray-200 md:text-6xl text-5xl">Visor de PDF</h1>
+        <img src="https://pbs.twimg.com/media/DUqv_5iUMAAIJVo?format=png&name=4096x4096" alt="Emblema" class="w-24 h-auto" width="100"/>
+      </center>
+    </div>
+  <div class="text-center">
+    <div class="flex justify-center items-center mb-4">
+      <embed src={`/src/content/docs/${filename}.pdf`} type="application/pdf" width="100%" height="600px" />
+    </div>
+</div>
+
+)}
+
+{!isCarta && !isPdf && (
+  <div>Archivo no reconocido.</div>
+)}

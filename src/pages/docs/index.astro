@@ -8,16 +8,22 @@ const metadata = {
 ---
 
 <Layout metadata={metadata}>
-  <h1>Validación de Documentos</h1>
-  <p>Ingresa el serial de validación para verificar su autenticidad.</p>
+  <div class="max-w-4xl mx-auto mt-12 p-6">
+    <h1 class="text-3xl font-bold mb-4">Validación de Documentos</h1>
+    <p class="mb-6">Ingresa el serial de validación para verificar su autenticidad. Si este existe se le redirigira al documento</p>
   
-  <form id="validation-form">
-    <label for="serial">Serial de Validación:</label>
-    <input type="text" id="serial" name="serial" required />
-    <button type="submit">Validar</button>
-  </form>
+    <form id="validation-form" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="serial">Serial de Validación:</label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" id="serial" name="serial" required />
+      </div>
+      <div class="flex items-center justify-between">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">Validar</button>
+      </div>
+    </form>
   
-  <div id="validation-result"></div>
+    <div id="validation-result" class="text-red-500 mt-4"></div>
+  </div>
 
   <script>
     document.getElementById('validation-form').addEventListener('submit', async function(event) {
@@ -37,7 +43,7 @@ const metadata = {
           validationResult = 'Documento no encontrado. Por favor, verifica el serial e inténtalo de nuevo.';
         }
       } catch (error) {
-        console.error('Error validating serial:', error);
+        console.error('Error validando el serial:', error);
         validationResult = 'Error validando el serial. Por favor, inténtalo de nuevo más tarde.';
       }
 
