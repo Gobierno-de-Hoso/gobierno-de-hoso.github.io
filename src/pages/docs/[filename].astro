@@ -9,7 +9,7 @@ const year = new Date().getFullYear();
 
 export async function getStaticPaths() {
   const letters = await Astro.glob('src/content/docs/**/*.md');
-  const docsPath = path.resolve('src/content/docs');
+  const docsPath = path.resolve('docs');
   
   // Verificar que la carpeta docs existe
   let pdfFiles = [];
@@ -56,7 +56,7 @@ if (filename.startsWith('C')) {
   });
 } else if (filename.startsWith('T')) {
   // Verificar que el archivo PDF existe
-  const pdfPath = path.resolve(`src/content/docs/${filename}.pdf`);
+  const pdfPath = path.resolve(`/docs/${filename}.pdf`);
   if (fs.existsSync(pdfPath)) {
     isPdf = true;
   } else {
@@ -83,7 +83,7 @@ if (filename.startsWith('C')) {
     </div>
   <div class="text-center">
     <div class="flex justify-center items-center mb-4">
-      <embed src={`/src/content/docs/${filename}.pdf`} type="application/pdf" width="100%" height="600px" />
+      <embed src={`/docs/${filename}.pdf`} type="application/pdf" width="100%" height="600px" />
     </div>
 </div>
 
