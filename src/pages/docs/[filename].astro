@@ -219,6 +219,15 @@ if (filename.startsWith('C')) {
         });
       });
 
+      pages.forEach((page) => {
+        page.drawText(`Serial: ${filename}`, {
+          x: width/2.5,
+          y: height - 20,
+          size: 12,
+          color: rgb(0, 0, 0),
+        });
+      });
+
       const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
 
       const pdfViewer = document.getElementById('pdfViewer');
