@@ -3,6 +3,8 @@ import Carta from 'src/components/Carta.astro';
 import QRCode from 'qrcode';
 import fs from 'fs';
 import path from 'path';
+import { PDFDocument } from 'pdf-lib';
+import { readPdfMetadata } from 'src/utils/readPdfMetadata';
 
 // Obtener el año actual
 const year = new Date().getFullYear();
@@ -36,6 +38,7 @@ let isCarta = false;
 let isPdf = false;
 let letter = null;
 let qrCodeDataUrl = '';
+let metadata = {};
 
 if (filename.startsWith('C')) {
   // Importar el archivo markdown basado en el filename
@@ -58,6 +61,15 @@ if (filename.startsWith('C')) {
   // Verificar que el archivo PDF existe
   const pdfPath = path.resolve(`public/docs/${filename}.pdf`); // Cambiado a la carpeta public
   if (fs.existsSync(pdfPath)) {
+    metadata = await readPdfMetadata(pdfPath);
+    const siteUrl = new URL(Astro.site);
+    const qrCodeUrl = `${siteUrl.origin}/docs/${filename}`;
+    qrCodeDataUrl = await QRCode.toDataURL(qrCodeUrl, {
+      color: {
+        dark: '#000000',  // Puntos negros
+        light: '#0000'    // Fondo transparente
+      }
+    });
     isPdf = true;
   } else {
     // Manejo del caso en que no se encuentra el archivo PDF
@@ -75,20 +87,144 @@ if (filename.startsWith('C')) {
 )}
 
 {isPdf && (
-  <div class="flex justify-center">
-        <center>
+  <div>
+    <style>
+      table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+
+      tr:nth-child(even) {
+        background-color: #dddddd;
+      }
+
+      .bold {
+        font-weight: bold;
+      }
+
+      .italic {
+        font-style: italic;
+      }
+    </style>
+    <div class="flex justify-center mb-8">
+      <center>
         <h1 class="font-bold leading-tighter tracking-tighter mb-4 dark:text-gray-200 md:text-6xl text-5xl">Visor de PDF</h1>
-        <img src="https://pbs.twimg.com/media/DUqv_5iUMAAIJVo?format=png&name=4096x4096" alt="Emblema" class="w-24 h-auto" width="100"/>
       </center>
     </div>
-  <div class="text-center">
-    <div class="flex justify-center items-center mb-4">
-      <embed src={`/docs/${filename}.pdf`} type="application/pdf" width="100%" height="600px" />
+    <div class="text-center mb-8">
+      <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-black">
+          <thead>
+            <tr>
+              <th class="px-4 py-2 border border-black"><center>Rep&uacute;blica Federal de Hoso</center></th>
+              <th class="px-4 py-2 border border-black">Informaci&oacute;n</th>
+              <th class="px-4 py-2 border border-black">Validez</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowspan="3" class="border px-4 py-2 border-black">
+                <center>
+                  <img src="https://pbs.twimg.com/media/DUqv_5iUMAAIJVo?format=png&amp;name=4096x4096" alt="Emblema" class="w-24 h-auto" height="100px" />
+                  <br>
+                  <span class="bold">Sistema de Gesti&oacute;n de Documentos</span>
+                </center>
+              </td>
+              <td class="border text-center font-bold border-black">
+                Nombre: <span class="italic bold">{metadata.title}</span>
+              </td>
+              <td>V&aacute;lido desde: <span class="italic bold">{metadata.subject}</span></td>
+            </tr>
+            <tr>
+              <td class="border px-4 py-2 text-center border-black">
+                Firmado por: <span class="italic bold">{metadata.author}</span>
+              </td>
+              <td class="border px-4 py-2 text-center border-black">
+                <img src={qrCodeDataUrl} alt="C&oacute;digo QR" class="w-24 h-auto mx-auto" />
+              </td>
+            </tr>
+            <tr>
+              <td class="border px-4 py-2 border-black">
+                <pr class="italic">{metadata.keywords}</pr>
+              </td>
+              <td class="border px-4 py-2 border-black">
+                Creado: {new Date(metadata.creationDate).toLocaleString('es-CR', { timeZone: 'America/Costa_Rica' })}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-</div>
-
+    <div class="flex justify-center items-center mb-4">
+      <embed id="pdfViewer" type="application/pdf" width="100%" height="600px" />
+    </div>
+    <div class="text-center mt-4">
+      Consultado el: {new Date().toLocaleString('es-CR', { timeZone: 'America/Costa_Rica' })}
+    </div>
+  </div>
 )}
 
 {!isCarta && !isPdf && (
   <div>Archivo no reconocido.</div>
 )}
+
+<script define:vars={{ isPdf, filename, metadata }}>
+  (async () => {
+    try {
+      const { PDFDocument, rgb, degrees } = await import('https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/+esm');
+      console.log('Loading PDF:', filename);
+      const pdfUrl = `/docs/${filename}.pdf`;
+
+      const response = await fetch(pdfUrl);
+      if (!response.ok) {
+        throw new Error(`Error fetching PDF: ${response.statusText}`);
+      }
+      const pdfBytes = await response.arrayBuffer();
+
+      const pdfDoc = await PDFDocument.load(pdfBytes);
+
+      const pages = pdfDoc.getPages();
+      const { width, height } = pages[0].getSize();
+      const currentDate = new Date();
+      const [day, month, year] = metadata.subject.split('/');
+      const validUntilDate = new Date(`${year}-${month}-${day}`);
+
+      if (validUntilDate > currentDate) {
+        pages.forEach((page) => {
+          page.drawText(`Documento no v\xe1lido hasta ${metadata.subject}`, {
+            x: width/4,
+            y: height/1.2,
+            size: 30,
+            color: rgb(1, 0, 0),
+            opacity: 0.5,
+            rotate: degrees(-45),
+            maxWidth: width,
+          });
+        });
+      }
+
+      pages.forEach((page) => {
+        page.drawText(`Consultado el: ${new Date().toLocaleString('es-CR', { timeZone: 'America/Costa_Rica' })}`, {
+          x: width - 200,
+          y: 10,
+          size: 12,
+          color: rgb(0, 0, 0),
+        });
+      });
+
+      const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+
+      const pdfViewer = document.getElementById('pdfViewer');
+      pdfViewer.src = pdfDataUri;
+    } catch (error) {
+      console.error('Error loading PDF:', error);
+    }
+  })();
+</script>
