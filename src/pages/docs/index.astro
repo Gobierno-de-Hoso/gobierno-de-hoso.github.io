@@ -5,12 +5,21 @@ const metadata = {
   title: 'Validación de Documentos - República de Hoso',
   ignoreTitleTemplate: true,
 };
+
+// Detectar si se accedió con ?serial=... en la URL
+const url = new URL(Astro.request.url);
+const serial = url.searchParams.get('serial');
+
+// Si hay serial, redirigir a /docs/[serial]
+if (serial) {
+  return Astro.redirect(`/docs/${serial}`);
+}
 ---
 
 <Layout metadata={metadata}>
   <div class="max-w-4xl mx-auto mt-12 p-6">
     <h1 class="text-3xl font-bold mb-4">Validación de Documentos</h1>
-    <p class="mb-6">Ingresa el serial de validación para verificar su autenticidad. Si este existe se le redirigira al documento</p>
+    <p class="mb-6">Ingresa el serial de validación para verificar su autenticidad. Si este existe se le redirigirá al documento.</p>
   
     <form id="validation-form" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
       <div class="mb-4">
@@ -29,7 +38,7 @@ const metadata = {
     document.getElementById('validation-form').addEventListener('submit', async function(event) {
       event.preventDefault();
       
-      const serial = document.getElementById('serial').value;
+      const serial = document.getElementById('serial').value.trim();
       let validationResult = null;
 
       try {
